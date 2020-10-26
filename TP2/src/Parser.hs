@@ -16,10 +16,9 @@ import           Untyped
 
 num :: Integer -> LamTerm
 num 0 = Abs "s" (Abs "z" (LVar "z"))
-num n = Abs "s" (Abs "z" (auxnum n))
-          where
-            auxnum n | n == 1    = App (LVar "s") (LVar "z")
-                     | otherwise = App (LVar "s") (auxnum (n-1))
+num n = Abs "s" (Abs "z" (auxnum n)) where
+          auxnum n | n == 1    = App (LVar "s") (LVar "z")
+                   | otherwise = App (LVar "s") (auxnum (n-1))
 
 -------------------------------------------------
 -- Parser de Lambda Cálculo (Gramática Extendida)
