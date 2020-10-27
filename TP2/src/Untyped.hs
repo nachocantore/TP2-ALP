@@ -33,15 +33,12 @@ eval :: NameEnv Value -> Term -> Value
 eval e t = eval' t (e, [])
 
 eval' :: Term -> (NameEnv Value, [Value]) -> Value
-eval' (Bound ii) (_, lEnv) = lEnv !! ii -- lo cambia por la variable en esta posicion
+eval' (Bound ii) (_, lEnv) = lEnv !! ii
 eval' (Free x) (nvs, lEnv) = case lookup x nvs of
                                Just v  -> v
                                Nothing -> VNeutral (NFree x)
 eval' (t1 :@: t2)      env = vapp (eval' t1 env) (eval' t2 env)
 eval' (Lam t)  (nvs, lEnv) = VLam (\v->(eval' t (nvs,v:lEnv)))
-
---eval' _          _         = undefined
-
 
 --------------------------------
 -- Sección 4 - Mostrando Valores
