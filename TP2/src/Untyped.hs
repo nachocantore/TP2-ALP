@@ -26,7 +26,8 @@ convaux (Abs bv t1) names = Lam (convaux t1 (bv : names))
 -------------------------------
 
 vapp :: Value -> Value -> Value
-vapp = undefined
+vapp (VLam f)     v = f v
+vapp (VNeutral n) v = VNeutral (NApp n v)
 
 eval :: NameEnv Value -> Term -> Value
 eval e t = eval' t (e, [])
