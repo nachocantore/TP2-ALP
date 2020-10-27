@@ -12,14 +12,14 @@ import           Common
 ------------------------------------------------------------
 
 conversion :: LamTerm -> Term
-conversion (LVar var)      = Free (Global var)
-conversion (App t u)       = (conversion t) :@: (conversion u)
-conversion (Abs bound1 t1) = Lam (auxconversion t1 [bound1]) where
-                               auxconversion (LVar var) names      = case elemIndex var names of
-                                                                       Just n  -> Bound n
-                                                                       Nothing -> Free (Global var)
-                               auxconversion (App t u) names       = (auxconversion t names) :@: (auxconversion u names)
-                               auxconversion (Abs bound2 t2) names = Lam (auxconversion t2 (bound2 : names))
+conversion t = convaux t []
+
+convaux :: LamTerm -> [String] -> Term
+convaux (LVar var)  names = case elemIndex var names of
+                              Just n  -> Bound n
+                              Nothing -> Free (Global var)
+convaux (App t1 t2) names = (convaux t1 names) :@: (convaux t2 names)
+convaux (Abs bv t1) names = Lam (convaux t1 (bv : names))
 
 -------------------------------
 -- Sección 3
