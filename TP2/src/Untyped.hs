@@ -45,4 +45,11 @@ eval' (Lam t)  (nvs, lEnv) = VLam (\v->(eval' t (nvs,v:lEnv)))
 --------------------------------
 
 quote :: Value -> Term
-quote = undefined
+quote v = qaux v 0
+
+qaux :: Value -> Int -> Term
+qaux (VLam f)              i = Lam (qaux (f (VNeutral (NFree (Quote i)))) (i+1))
+qaux (VNeutral (NFree x))  i = case x of
+                                 Global s -> Free (Global s)
+                                 Quote  k -> Bound (i-k-1)
+qaux (VNeutral (NApp n v)) i = (qaux (VNeutral n) i) :@: (qaux v i)
