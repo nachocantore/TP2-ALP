@@ -1,0 +1,13 @@
+-- Funciones Auxiliares
+def length = Y (\f xs. (isnil xs) (zero) (suc (f (tail xs))))
+
+def concat = Y (\f xs ys. (isnil xs) ys (cons (head xs) (f (tail xs) ys)))
+
+def foldn = id
+
+def map = Y (\fun f xs. (isnil xs) nil (cons (f (head xs)) (fun f xs)))
+
+def aux = \f p. pair (concat (fst p) (cons (head (snd p)) nil)) (map f (tail (snd p)))
+
+-- MapN
+def mapN = \f xs. fst (foldn (length xs) (aux f) (pair nil xs))
